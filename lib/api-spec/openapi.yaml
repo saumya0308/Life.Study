@@ -1,0 +1,507 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: BioQuest - The Living World educational game API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: students
+    description: Student management
+  - name: progress
+    description: Game progress tracking
+  - name: leaderboard
+    description: Leaderboard
+  - name: teacher
+    description: Teacher dashboard
+  - name: levels
+    description: Level metadata
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /students/login:
+    post:
+      operationId: loginStudent
+      tags: [students]
+      summary: Login or register student by name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentLogin"
+      responses:
+        "200":
+          description: Student logged in or created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+
+  /students/{id}:
+    get:
+      operationId: getStudent
+      tags: [students]
+      summary: Get student by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "404":
+          description: Student not found
+
+  /students/{id}/progress:
+    get:
+      operationId: getStudentProgress
+      tags: [progress]
+      summary: Get all level progress for a student
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of progress records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Progress"
+    post:
+      operationId: saveProgress
+      tags: [progress]
+      summary: Save or update progress for a level
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgressInput"
+      responses:
+        "200":
+          description: Progress saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Progress"
+
+  /students/{id}/summary:
+    get:
+      operationId: getStudentSummary
+      tags: [students]
+      summary: Get student summary - total score, badges, completed levels
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Student summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentSummary"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Get top students by total score
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /teacher/verify:
+    post:
+      operationId: verifyTeacherPin
+      tags: [teacher]
+      summary: Verify the teacher access PIN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherPinInput"
+      responses:
+        "200":
+          description: PIN verification result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherPinResult"
+
+  /teacher/weak-spots:
+    get:
+      operationId: getClassWeakSpots
+      tags: [teacher]
+      summary: Get most-missed concepts across all students
+      responses:
+        "200":
+          description: Aggregated weak concepts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeakSpot"
+
+  /students/{id}/mistakes:
+    get:
+      operationId: getStudentMistakes
+      tags: [students]
+      summary: Get a student's missed concepts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of missed concepts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MistakeRecord"
+    post:
+      operationId: recordStudentMistakes
+      tags: [students]
+      summary: Record concepts a student answered incorrectly
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MistakesInput"
+      responses:
+        "200":
+          description: Mistakes recorded
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MistakeRecord"
+
+  /teacher/dashboard:
+    get:
+      operationId: getTeacherDashboard
+      tags: [teacher]
+      summary: Get all students with their progress for teacher view
+      responses:
+        "200":
+          description: All student data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TeacherStudentRecord"
+
+  /levels:
+    get:
+      operationId: getLevels
+      tags: [levels]
+      summary: Get all game levels metadata
+      responses:
+        "200":
+          description: List of levels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Level"
+
+  /levels/{levelId}/stats:
+    get:
+      operationId: getLevelStats
+      tags: [levels]
+      summary: Get stats for a level - completion count, average score
+      parameters:
+        - name: levelId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Level stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LevelStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Student:
+      type: object
+      required: [id, name, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        createdAt:
+          type: string
+        className:
+          type: ["string", "null"]
+
+    StudentLogin:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        className:
+          type: string
+
+    StudentSummary:
+      type: object
+      required: [id, name, totalScore, completedLevels, badges, streak]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        totalScore:
+          type: integer
+        completedLevels:
+          type: integer
+        badges:
+          type: array
+          items:
+            type: string
+        streak:
+          type: integer
+
+    Progress:
+      type: object
+      required: [id, studentId, levelId, score, completed, badges, streak, updatedAt]
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        levelId:
+          type: integer
+        score:
+          type: integer
+        completed:
+          type: boolean
+        badges:
+          type: array
+          items:
+            type: string
+        streak:
+          type: integer
+        updatedAt:
+          type: string
+
+    ProgressInput:
+      type: object
+      required: [levelId, score, completed]
+      properties:
+        levelId:
+          type: integer
+        score:
+          type: integer
+        completed:
+          type: boolean
+        badges:
+          type: array
+          items:
+            type: string
+        streak:
+          type: integer
+
+    LeaderboardEntry:
+      type: object
+      required: [rank, studentId, name, totalScore, completedLevels, badges]
+      properties:
+        rank:
+          type: integer
+        studentId:
+          type: integer
+        name:
+          type: string
+        className:
+          type: ["string", "null"]
+        totalScore:
+          type: integer
+        completedLevels:
+          type: integer
+        badges:
+          type: array
+          items:
+            type: string
+
+    TeacherStudentRecord:
+      type: object
+      required: [id, name, totalScore, completedLevels, badges, lastActive, levelProgress]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        className:
+          type: string
+          nullable: true
+        totalScore:
+          type: integer
+        completedLevels:
+          type: integer
+        badges:
+          type: array
+          items:
+            type: string
+        lastActive:
+          type: string
+        levelProgress:
+          type: array
+          items:
+            $ref: "#/components/schemas/Progress"
+
+    Level:
+      type: object
+      required: [id, title, description, topic, maxScore, order]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        topic:
+          type: string
+        maxScore:
+          type: integer
+        order:
+          type: integer
+        badgeReward:
+          type: ["string", "null"]
+
+    TeacherPinInput:
+      type: object
+      required: [pin]
+      properties:
+        pin:
+          type: string
+          minLength: 1
+
+    TeacherPinResult:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+
+    MistakesInput:
+      type: object
+      required: [concepts]
+      properties:
+        concepts:
+          type: array
+          items:
+            type: string
+
+    MistakeRecord:
+      type: object
+      required: [concept, count, lastMissedAt]
+      properties:
+        concept:
+          type: string
+        count:
+          type: integer
+        lastMissedAt:
+          type: string
+
+    WeakSpot:
+      type: object
+      required: [concept, totalMisses, studentCount]
+      properties:
+        concept:
+          type: string
+        totalMisses:
+          type: integer
+        studentCount:
+          type: integer
+
+    LevelStats:
+      type: object
+      required: [levelId, totalAttempts, completions, averageScore]
+      properties:
+        levelId:
+          type: integer
+        totalAttempts:
+          type: integer
+        completions:
+          type: integer
+        averageScore:
+          type: integer

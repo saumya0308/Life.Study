@@ -1,0 +1,63 @@
+Build a complete full-stack interactive educational game that helps students learn NCERT Class 11 Biology Chapter 1: “The Living World.”
+
+Use the chapter content as the source material. The game should teach these topics:
+- What is living?
+- Growth, reproduction, metabolism, cellular organisation, consciousness, and response to stimuli
+- Diversity in the living world
+- Identification, nomenclature, classification, taxonomy, and systematics
+- Binomial nomenclature rules with examples like Mangifera indica and Homo sapiens
+- Taxonomic hierarchy: species, genus, family, order, class, phylum/division, kingdom
+- Taxonomical aids: herbarium, botanical garden, museum, zoological park, and taxonomic key
+
+Create a fun story-based game called “BioQuest: The Living World.”
+
+Game concept:
+The player is a young biology explorer who travels through different zones of the living world. Each level teaches one concept from the chapter through mini-games, quizzes, drag-and-drop tasks, and instant explanations.
+
+Required tech stack:
+- Frontend: React with Vite
+- Backend: Node.js with Express
+- Database: SQLite or JSON file storage
+- Styling: modern responsive CSS
+- The app must run directly on Replit without paid APIs
+
+Required features:
+1. Home page with game title, short intro, and Start Game button.
+2. Student login using name only, no password required.
+3. Level map with locked and unlocked levels.
+4. At least 6 playable levels:
+   - Level 1: Living vs Non-living sorting game
+   - Level 2: Characteristics of life quiz
+   - Level 3: Binomial nomenclature correction challenge
+   - Level 4: Taxonomic hierarchy drag-and-drop game
+   - Level 5: Match taxonomical aids with their uses
+   - Level 6: Final boss quiz covering the full chapter
+5. Every question should give instant feedback:
+   - Correct answer message
+   - Wrong answer explanation
+   - Short concept explanation in simple student-friendly language
+6. Score system:
+   - Points for correct answers
+   - Bonus points for streaks
+   - Final score summary
+7. Progress saving:
+   - Save student name, completed levels, score, and badges
+8. Badges:
+   - “Life Detective”
+   - “Taxonomy Master”
+   - “Binomial Boss”
+   - “Classification Champion”
+9. Leaderboard page showing top scores.
+10. Revision page with short notes from the chapter.
+11. Teacher-friendly dashboard showing each student’s progress.
+12. Make the UI colorful, clean, and student-friendly, with cards, animations, progress bars, and buttons.
+13. Make the game mobile-friendly.
+14. Add enough sample questions and data directly in the project.
+15. Include clear comments in the code.
+16. Provide all required files and setup instructions.
+
+Important:
+- Do not make just a quiz app. Make it feel like a real interactive learning game.
+- Use simple English suitable for school students.
+- Make every level connected to the chapter concepts.
+- The app should be fully functional, not just a design mockup.
