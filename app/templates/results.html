@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Temple Results{% endblock %}
+{% block content %}
+<section class="results panel">
+    {% if game.completed %}
+        <p class="gold-glow">✦</p>
+        <h1>Temple Conquered!</h1>
+        <p>{{ student.name }}, you reached the final chamber.</p>
+    {% else %}
+        <h1>The Temple Has Gone Dark!</h1>
+        <p>Your torches are gone, but the expedition data has been preserved.</p>
+    {% endif %}
+
+    <div class="stats-grid">
+        <div><span>Total Score</span><strong>{{ game.score }}</strong></div>
+        <div><span>Rooms Completed</span><strong>{{ game.rooms_completed }} / {{ game.total_rooms }}</strong></div>
+        <div><span>Accuracy</span><strong>{{ accuracy }}%</strong></div>
+        <div><span>Correct Answers</span><strong>{{ game.correct_answers }}</strong></div>
+        <div><span>Incorrect Answers</span><strong>{{ game.incorrect_answers }}</strong></div>
+        <div><span>Torches Remaining</span><strong>{{ game.torches_remaining }}</strong></div>
+        <div><span>Longest Streak</span><strong>{{ game.longest_streak }}</strong></div>
+        <div><span>Treasure Rooms</span><strong>{{ game.treasures_found }}</strong></div>
+    </div>
+
+    <h2>Chapter Mastery</h2>
+    {% if mastery %}
+        <div class="mastery-list">
+            {% for topic, percent in mastery %}
+            <div class="mastery-row">
+                <span>{{ topic }}</span>
+                <strong>{{ percent }}%</strong>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No mastery data yet.</p>
+    {% endif %}
+
+    <h2>Recommended Revision Topics</h2>
+    {% if weak_topics %}
+        <ul>
+            {% for topic in weak_topics %}<li>{{ topic }}</li>{% endfor %}
+        </ul>
+    {% else %}
+        <p>No topic fell below the 70% revision threshold.</p>
+    {% endif %}
+
+    <div class="button-row">
+        <a class="button" href="/game/{{ game.id }}/review">Review Mistakes</a>
+        <a class="button primary" href="/">Try Again</a>
+    </div>
+</section>
+{% endblock %}

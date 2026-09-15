@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Enter the Ruins{% endblock %}
+{% block content %}
+<section class="hero panel">
+    <p class="eyebrow">Class 11 Biology — Chapter 1</p>
+    <h1>Jungle Ancient Ruin Adventure</h1>
+    <h2>The Living World</h2>
+
+    <p class="story">
+        The lost Temple of Life has been discovered deep inside the jungle.
+        Its ancient chambers contain the knowledge of The Living World.
+        Answer the temple's challenges, protect your five torches and uncover
+        hidden treasures before darkness consumes the ruins.
+    </p>
+
+    <div class="torch-row" aria-label="Five torches">
+        {% for _ in range(max_torches) %}<span class="torch">🔥</span>{% endfor %}
+    </div>
+
+    <form method="post" action="/start" class="start-form">
+        <label for="student_name">Explorer name</label>
+        <input id="student_name" name="student_name" maxlength="120" required placeholder="Enter your name">
+        <button type="submit" class="button primary">Enter the Ruins</button>
+    </form>
+
+    <div class="objectives">
+        <strong>Objective:</strong>
+        Explore the temple · Answer biology questions · Find hidden treasure rooms · Reach the final chamber
+    </div>
+</section>
+{% endblock %}

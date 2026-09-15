@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Secret Treasure Discovered{% endblock %}
+{% block content %}
+<section class="treasure-room panel">
+    <p class="gold-glow">✦</p>
+    <h1>Secret Treasure Discovered!</h1>
+    <div class="treasure-chest">🧰</div>
+
+    <h2>{{ treasure.name }}</h2>
+    <p>{{ treasure.description }}</p>
+    <p class="big">+{{ outcome.points_awarded }} points total for this answer</p>
+
+    <div class="fact-card">
+        <strong>Explorer Fact</strong>
+        <p>{{ fact }}</p>
+    </div>
+
+    {% if game.completed %}
+        <a class="button primary" href="/game/{{ game.id }}/results">Enter the Final Chamber</a>
+    {% else %}
+        <a class="button primary" href="/game/{{ game.id }}/continue">Add to Inventory & Continue</a>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ room_name }}{% endblock %}
+{% block content %}
+<header class="hud panel">
+    <div><strong>Explorer:</strong> {{ student.name }}</div>
+    <div class="hud-torches" aria-label="{{ game.torches_remaining }} torches remaining">
+        {% for i in range(max_torches) %}
+            <span class="torch {% if i >= game.torches_remaining %}spent{% endif %}">🔥</span>
+        {% endfor %}
+    </div>
+    <div><strong>Room:</strong> {{ game.current_room }} / {{ game.total_rooms }}</div>
+    <div><strong>Score:</strong> {{ game.score }}</div>
+    <div><strong>Streak:</strong> {{ game.current_streak }} / 3</div>
+    <div><strong>Treasure:</strong> {{ game.treasures_found }}</div>
+</header>
+
+<section class="room panel">
+    <p class="eyebrow">{{ room_name }} · {{ question.topic }} · {{ question.difficulty|upper }}</p>
+    <h1>{{ question.question }}</h1>
+    <p class="instruction">Choose one ancient door.</p>
+
+    <form method="post" action="/game/{{ game.id }}/answer">
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <div class="door-grid">
+            {% for option in options %}
+            <button type="submit" class="door" name="selected_answer" value="{{ option }}">
+                <span class="door-symbol">𓂀</span>
+                <span class="door-label">{{ option }}</span>
+            </button>
+            {% endfor %}
+        </div>
+    </form>
+</section>
+
+<section class="map-strip panel">
+    <span>Jungle Entrance</span>
+    <span>→</span>
+    <strong>{{ room_name }}</strong>
+    <span>→</span>
+    <span>Final Ruin Chamber</span>
+</section>
+{% endblock %}

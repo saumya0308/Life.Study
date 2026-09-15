@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Answer Result{% endblock %}
+{% block content %}
+<section class="feedback panel {% if outcome.correct %}correct{% else %}wrong{% endif %}">
+    {% if outcome.correct %}
+        <p class="result-icon">✓</p>
+        <h1>Correct!</h1>
+        <p class="big">+{{ outcome.points_awarded }} points</p>
+    {% else %}
+        <p class="result-icon">✕</p>
+        <h1>The Ancient Trap Was Activated!</h1>
+        <p class="trap-text">Vines snap across the doorway and the stone guardian's eyes briefly glow.</p>
+        <p class="big">🔥 One torch lost</p>
+    {% endif %}
+
+    <div class="answer-card">
+        <p><strong>Correct answer:</strong> {{ question.correct_answer }}</p>
+        <p>{{ question.explanation }}</p>
+    </div>
+
+    <p><strong>Current score:</strong> {{ game.score }}</p>
+    <p><strong>Correct streak:</strong> {{ game.current_streak }} / 3</p>
+
+    <div class="torch-row">
+        {% for i in range(max_torches) %}
+            <span class="torch {% if i >= game.torches_remaining %}spent{% endif %}">🔥</span>
+        {% endfor %}
+    </div>
+
+    {% if game.game_over or game.completed %}
+        <a class="button primary" href="/game/{{ game.id }}/results">
+            {% if game.completed %}View Victory Results{% else %}View Results{% endif %}
+        </a>
+    {% else %}
+        <a class="button primary" href="/game/{{ game.id }}/continue">
+            {% if outcome.correct %}Continue Exploring{% else %}Escape the Trap{% endif %}
+        </a>
+    {% endif %}
+</section>
+{% endblock %}

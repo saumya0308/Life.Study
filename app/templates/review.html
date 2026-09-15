@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Review Mistakes{% endblock %}
+{% block content %}
+<section class="review panel">
+    <h1>Review Mistakes</h1>
+
+    {% if mistakes %}
+        {% for item in mistakes %}
+        <article class="mistake-card">
+            <p class="eyebrow">{{ item.topic }}</p>
+            <h2>{{ item.question_text }}</h2>
+            <p><strong>Your answer:</strong> {{ item.selected_answer }}</p>
+            <p><strong>Correct answer:</strong> {{ item.correct_answer }}</p>
+            <p>{{ item.explanation }}</p>
+        </article>
+        {% endfor %}
+    {% else %}
+        <p>Perfect expedition — no mistakes to review.</p>
+    {% endif %}
+
+    <div class="button-row">
+        <a class="button" href="/game/{{ game.id }}/results">Back to Results</a>
+        <a class="button primary" href="/">Start New Expedition</a>
+    </div>
+</section>
+{% endblock %}
